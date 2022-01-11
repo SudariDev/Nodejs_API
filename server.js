@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
-const bodyparser = require('body-parser')
-const mongoose = require('mongoose');
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }));
-const Usermodel = require('../Backend/src/models/Usermodel')
+const mongoose = require('mongoose')
+const Usermodel = require('./src/models/Usermodel')
+const bodyparser = require('body-parser');
 const cors = require('cors')
-app.use(cors)
+
+app.use(cors());
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}))
 
 
 //POST : /create
@@ -20,7 +21,7 @@ app.post('/createUser', (req, res) => {
 })
 
 //find a user
-app.get('/: id ', (req, res) => {
+app.get('/:id ', (req, res) => {
     console.log(req)
     Usermodel.findOne({ _id: req.params.id }).then((user) => {
         res.send(user)
@@ -32,6 +33,7 @@ app.get('/: id ', (req, res) => {
 
 //get all users
 app.get('/getUsers', (req, res) => {
+    
     Usermodel.find().then((users) => {
         res.send(users)
     }).catch((err) => {
@@ -64,23 +66,17 @@ app.put('/:id', (req, res) => {
             console.log("error")
         })
 
-
 })
 
 
-
-
-
-
-
 //database connection
-mongoose.connect('mongodb://localhost:27017', () => {
+mongoose.connect('mongodb://localhost:27017/usersDb', () => {
     console.log("Database connected")
 });
 
 
 
 //---------------------------Server--------------------//
-app.listen('4000', () => {
+app.listen(4000, () => {
     console.log("Server running on port 4000")
 })
